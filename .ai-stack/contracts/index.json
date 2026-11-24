@@ -1,0 +1,11 @@
+{
+  "contracts": [
+    {
+      "slug": "saludo-api",
+      "version": "1.0.0",
+      "hash": "47e4acc6d22bcafdec0bb2f6534d285c3c107e66c0b7b8e198d935309d9f1f1e",
+      "role": "provider",
+      "manifest": "saludo-api/contract.json"
+    }
+  ]
+}

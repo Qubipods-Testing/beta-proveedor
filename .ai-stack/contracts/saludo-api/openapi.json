@@ -1,0 +1,136 @@
+{
+  "info": {
+    "title": "API de saludo",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/saludo": {
+      "get": {
+        "summary": "Pedir un saludo personalizado",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SaludoResponse"
+                },
+                "examples": {
+                  "nombre-valido": {
+                    "value": {
+                      "mensaje": "Hola, Ana.",
+                      "generadoEn": "2026-11-24T10:15:00.000Z"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Saludo generado"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "nombre-faltante": {
+                    "value": {
+                      "codigo": "NOMBRE_OBLIGATORIO",
+                      "mensaje": "El nombre es obligatorio."
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Falta el nombre"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "nombre-muy-largo": {
+                    "value": {
+                      "codigo": "NOMBRE_DEMASIADO_LARGO",
+                      "mensaje": "El nombre no puede superar 50 caracteres."
+                    }
+                  }
+                }
+              }
+            },
+            "description": "El nombre supera el máximo permitido"
+          }
+        },
+        "parameters": [
+          {
+            "in": "query",
+            "name": "nombre",
+            "schema": {
+              "type": "string",
+              "maxLength": 50
+            },
+            "examples": {
+              "nombre-valido": {
+                "value": "Ana"
+              },
+              "nombre-muy-largo": {
+                "value": "Aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+              }
+            },
+            "required": true
+          }
+        ],
+        "operationId": "obtenerSaludo"
+      }
+    }
+  },
+  "openapi": "3.1.0",
+  "components": {
+    "schemas": {
+      "ErrorResponse": {
+        "type": "object",
+        "required": [
+          "codigo",
+          "mensaje"
+        ],
+        "properties": {
+          "codigo": {
+            "enum": [
+              "NOMBRE_OBLIGATORIO",
+              "NOMBRE_DEMASIADO_LARGO"
+            ],
+            "type": "string",
+            "description": "Código único del error",
+            "x-extensible": true
+          },
+          "mensaje": {
+            "type": "string",
+            "description": "Mensaje legible del error"
+          }
+        },
+        "additionalProperties": false
+      },
+      "SaludoResponse": {
+        "type": "object",
+        "required": [
+          "mensaje",
+          "generadoEn"
+        ],
+        "properties": {
+          "mensaje": {
+            "type": "string",
+            "description": "Mensaje de saludo, con el nombre recortado"
+          },
+          "generadoEn": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Fecha y hora en que se generó el saludo, en ISO 8601"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}
