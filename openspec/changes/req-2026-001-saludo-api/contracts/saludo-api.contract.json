@@ -1,0 +1,117 @@
+{
+  "format": "qubipods.contract/1",
+  "slug": "saludo-api",
+  "title": "API de saludo",
+  "summary": "Endpoint HTTP que devuelve un saludo personalizado y la fecha de generación para que otros sistemas lo muestren sin reimplementarlo.",
+  "provider": { "system": "beta-proveedor" },
+  "parts": [
+    {
+      "id": "api",
+      "type": "http-api",
+      "casing": "camelCase",
+      "openapi": {
+        "openapi": "3.1.0",
+        "info": { "title": "API de saludo", "version": "1.0.0" },
+        "paths": {
+          "/saludo": {
+            "get": {
+              "operationId": "obtenerSaludo",
+              "summary": "Pedir un saludo personalizado",
+              "parameters": [
+                {
+                  "name": "nombre",
+                  "in": "query",
+                  "required": true,
+                  "schema": { "type": "string", "maxLength": 50 },
+                  "examples": {
+                    "nombre-valido": { "value": "Ana" },
+                    "nombre-muy-largo": {
+                      "value": "Aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                    }
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "Saludo generado",
+                  "content": {
+                    "application/json": {
+                      "schema": { "$ref": "#/components/schemas/SaludoResponse" },
+                      "examples": {
+                        "nombre-valido": {
+                          "value": {
+                            "mensaje": "Hola, Ana.",
+                            "generadoEn": "2026-11-24T10:15:00.000Z"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "400": {
+                  "description": "Falta el nombre",
+                  "content": {
+                    "application/json": {
+                      "schema": { "$ref": "#/components/schemas/ErrorResponse" },
+                      "examples": {
+                        "nombre-faltante": {
+                          "value": {
+                            "codigo": "NOMBRE_OBLIGATORIO",
+                            "mensaje": "El nombre es obligatorio."
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "422": {
+                  "description": "El nombre supera el máximo permitido",
+                  "content": {
+                    "application/json": {
+                      "schema": { "$ref": "#/components/schemas/ErrorResponse" },
+                      "examples": {
+                        "nombre-muy-largo": {
+                          "value": {
+                            "codigo": "NOMBRE_DEMASIADO_LARGO",
+                            "mensaje": "El nombre no puede superar 50 caracteres."
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "SaludoResponse": {
+              "type": "object",
+              "properties": {
+                "mensaje": { "type": "string", "description": "Mensaje de saludo, con el nombre recortado" },
+                "generadoEn": { "type": "string", "format": "date-time", "description": "Fecha y hora en que se generó el saludo, en ISO 8601" }
+              },
+              "required": ["mensaje", "generadoEn"],
+              "additionalProperties": false
+            },
+            "ErrorResponse": {
+              "type": "object",
+              "properties": {
+                "codigo": {
+                  "type": "string",
+                  "enum": ["NOMBRE_OBLIGATORIO", "NOMBRE_DEMASIADO_LARGO"],
+                  "x-extensible": true,
+                  "description": "Código único del error"
+                },
+                "mensaje": { "type": "string", "description": "Mensaje legible del error" }
+              },
+              "required": ["codigo", "mensaje"],
+              "additionalProperties": false
+            }
+          }
+        }
+      }
+    }
+  ]
+}
