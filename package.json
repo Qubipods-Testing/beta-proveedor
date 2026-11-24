@@ -1,0 +1,9 @@
+{
+  "name": "beta-proveedor",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Servidor HTTP que publica el contrato saludo-api.",
+  "scripts": {
+    "test": "node --test"
+  }
+}
