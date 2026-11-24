@@ -1,0 +1,4 @@
+{
+  "traditionalHours": 8,
+  "basis": "Serie A: 1h de diseño del enrutamiento y el formato de error, 2h de pruebas node:test (5 escenarios + puerto efímero), 3h de implementación del servidor node:http y la validación, 1h de redacción y validación del contrato OpenAPI, 1h de revisión y ajustes de PR."
+}
