@@ -52,8 +52,9 @@ code.
    `pullRequests` lists the GitHub PR URLs this verification covers (normally the one
    you verify; after a merge, every PR of the change contained in `headSha`).
 6. Commit that file to the pull request branch (never to the default branch) with the attribution the
-   "## Entrega" block names (a Co-Authored-By trailer only when it says so; without the
-   block, add it), and push. Do not change anything else in the repository.
+   "## Entrega" block names (a Co-Authored-By trailer only when it says so). Without the block, add the
+   trailer only when the repository's `.claude/settings.json` does not set `attribution.commit` to an
+   empty string. Then push. Do not change anything else in the repository.
    If the instruction says the pull request is ALREADY MERGED: verify the merge commit it
    names on the base branch (default or release), set `headSha` to that merge commit, list ALL the change's
    pull requests in `pullRequests`, and deliver the file through a separate pull request
